@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CocktailListComponent } from './cocktail-list/cocktail-list.component';
+import { NasaService } from './nasa.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,12 @@ import { CocktailListComponent } from './cocktail-list/cocktail-list.component';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title(title: any) {
-    throw new Error('Method not implemented.');
+  imgOfTheDay!: string;
+  private nasa = inject(NasaService);
+
+  ngOnInit(): void {
+    this.nasa.getImageOfTheDay().subscribe((data) => {
+      this.imgOfTheDay = data.url;
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CocktailService } from '../cocktail-service.service';
 import { CommonModule } from '@angular/common';
 import { Cocktail } from '../models/cocktail';
@@ -11,10 +11,19 @@ import { Cocktail } from '../models/cocktail';
   styleUrl: './cocktail-list.component.css',
 })
 export class CocktailListComponent {
-  cocktails!: Cocktail[];
-  constructor(private cocktailService: CocktailService) {}
+  cocktails: Cocktail[] = [];
 
-  ngOnInit() {
-    this.cocktails = this.cocktailService.getCocktails();
+  // Injection de la dépendance CocktailService
+  private cocktailService = inject(CocktailService);
+
+  ngOnInit(): void {
+    this.cocktailService.getCocktail().subscribe((cocktailsFromJsonFile) => {
+      this.cocktails = cocktailsFromJsonFile;
+    });
   }
+
+  // Méthode sans Observable
+  // ngOnInit() {
+  //   this.cocktails = this.cocktailService.getCocktails();
+  // }
 }
